@@ -1,0 +1,106 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86_64
+            runner: ubuntu-latest
+            artifact: linux-x86_64
+            executable: target/release/keenetic-mobile-monitor
+          - name: macOS arm64
+            runner: macos-latest
+            artifact: macos-aarch64
+            executable: target/release/keenetic-mobile-monitor
+          - name: Windows x86_64
+            runner: windows-latest
+            artifact: windows-x86_64
+            executable: target/release/keenetic-mobile-monitor.exe
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: release-${{ matrix.runner }}
+
+      - name: Build
+        run: cargo build --release --locked
+
+      - name: Package
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          archive="keenetic-mobile-monitor-${{ github.ref_name }}-${{ matrix.artifact }}.zip"
+          zip -j "$archive" \
+            "${{ matrix.executable }}" \
+            config.example.toml \
+            README.md \
+            LICENSE-MIT \
+            LICENSE-APACHE
+
+      - name: Package
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $archive = "keenetic-mobile-monitor-${{ github.ref_name }}-${{ matrix.artifact }}.zip"
+          $files = @(
+            "${{ matrix.executable }}",
+            "config.example.toml",
+            "README.md",
+            "LICENSE-MIT",
+            "LICENSE-APACHE"
+          )
+          Compress-Archive -Path $files -DestinationPath $archive
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: keenetic-mobile-monitor-${{ github.ref_name }}-${{ matrix.artifact }}
+          path: keenetic-mobile-monitor-${{ github.ref_name }}-${{ matrix.artifact }}.zip
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: dist
+          pattern: keenetic-mobile-monitor-*
+          merge-multiple: true
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if gh release view "$TAG_NAME" --repo "$REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" dist/*.zip --repo "$REPOSITORY" --clobber
+          else
+            gh release create "$TAG_NAME" dist/*.zip --repo "$REPOSITORY" --title "$TAG_NAME" --generate-notes --verify-tag
+          fi

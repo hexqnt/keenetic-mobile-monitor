@@ -1,0 +1,360 @@
+:root {
+	color-scheme: dark;
+	font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+	background: #0b1020;
+	color: #e8edf7;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: radial-gradient(circle at top, #16213d, #0b1020 45%);
+}
+
+main {
+	max-width: 1500px;
+	margin: auto;
+	padding: 28px;
+}
+
+header,
+.panel-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+header {
+	margin-bottom: 20px;
+}
+
+h1 {
+	margin: 0;
+	font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+h2 {
+	margin: 0;
+	font-size: 1.05rem;
+}
+
+header p,
+.panel-heading p {
+	margin: 0.35rem 0 0;
+	color: #94a3b8;
+}
+
+.status {
+	flex: 0 0 auto;
+	padding: 8px 12px;
+	border-radius: 999px;
+	background: #172033;
+}
+
+.status.online {
+	color: #86efac;
+}
+.status.offline {
+	color: #fda4af;
+}
+.status.pending {
+	color: #fde68a;
+}
+
+.cards {
+	display: grid;
+	gap: 14px;
+}
+
+.cards {
+	margin-bottom: 14px;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.card,
+.panel {
+	background: rgba(20, 29, 49, 0.92);
+	border: 1px solid #273451;
+	border-radius: 14px;
+	box-shadow: 0 18px 50px #0004;
+}
+
+.card {
+	padding: 16px;
+}
+
+.card span {
+	display: block;
+	color: #94a3b8;
+	font-size: 0.76rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.card strong {
+	display: block;
+	margin-top: 6px;
+	overflow-wrap: anywhere;
+	font-size: 1.05rem;
+}
+
+.panel {
+	margin-bottom: 14px;
+	padding: 10px;
+}
+
+.panel-heading {
+	padding: 8px 8px 12px;
+}
+.panel-heading p {
+	font-size: 0.86rem;
+}
+.chart {
+	height: 315px;
+}
+.signal-chart {
+	height: 500px;
+}
+.traffic-chart {
+	height: 340px;
+}
+.temperature-chart {
+	height: 315px;
+}
+.context-chart {
+	height: 410px;
+}
+
+.iperf-panel {
+	padding: 16px;
+}
+
+.iperf-controls {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.iperf-controls button {
+	padding: 9px 14px;
+	border: 1px solid #38bdf8;
+	border-radius: 9px;
+	background: #0c4a6e;
+	color: #e0f2fe;
+	cursor: pointer;
+	font: inherit;
+	font-weight: 600;
+}
+
+.iperf-controls button:hover:not(:disabled) {
+	background: #075985;
+}
+.iperf-controls button:disabled {
+	cursor: wait;
+	opacity: 0.55;
+}
+.iperf-panel .status.running {
+	color: #fde68a;
+}
+.iperf-panel .status.finished {
+	color: #86efac;
+}
+.iperf-panel .status.failed {
+	color: #fda4af;
+}
+.iperf-panel .status.cancelled {
+	color: #94a3b8;
+}
+
+.iperf-output {
+	min-height: 64px;
+	max-height: 280px;
+	margin: 4px 8px 0;
+	padding: 12px;
+	overflow: auto;
+	border: 1px solid #273451;
+	border-radius: 9px;
+	background: #0b1020;
+	color: #cbd5e1;
+	white-space: pre-wrap;
+}
+
+.table-panel {
+	padding: 16px;
+}
+
+.panel-action {
+	flex: 0 0 auto;
+	padding: 8px 12px;
+	border: 1px solid #38bdf8;
+	border-radius: 9px;
+	background: #0c4a6e;
+	color: #e0f2fe;
+	cursor: pointer;
+	font: inherit;
+	font-weight: 600;
+}
+
+.panel-action:hover:not(:disabled) {
+	background: #075985;
+}
+.panel-action:disabled {
+	cursor: default;
+	opacity: 0.55;
+}
+
+.table-scroll {
+	max-width: 100%;
+	overflow: auto;
+	border: 1px solid #273451;
+	border-radius: 10px;
+}
+
+.table-scroll.tall {
+	max-height: 430px;
+}
+.events-scroll {
+	max-height: 330px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.86rem;
+}
+
+th,
+td {
+	padding: 10px 12px;
+	border-bottom: 1px solid #273451;
+	text-align: left;
+	white-space: nowrap;
+}
+
+th {
+	position: sticky;
+	z-index: 1;
+	top: 0;
+	background: #141d31;
+	color: #94a3b8;
+	font-size: 0.72rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+tr:last-child td {
+	border-bottom: 0;
+}
+tbody tr:hover {
+	background: #1c2942;
+}
+td.context-cell {
+	min-width: 260px;
+	white-space: pre-line;
+}
+td.carrier-statistics-identity {
+	min-width: 180px;
+}
+td.carrier-statistics-cell {
+	max-width: 340px;
+	overflow-wrap: anywhere;
+	white-space: normal;
+}
+td.distribution-cell {
+	min-width: 250px;
+	white-space: pre-line;
+	line-height: 1.5;
+}
+td.empty {
+	padding: 24px;
+	color: #94a3b8;
+	text-align: center;
+}
+.numeric {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.carrier-state,
+.event-kind {
+	display: inline-block;
+	padding: 3px 7px;
+	border-radius: 999px;
+	background: #25324b;
+	font-size: 0.72rem;
+}
+
+.carrier-state.active,
+.event-kind.recovered {
+	color: #86efac;
+}
+.carrier-state.inactive {
+	color: #94a3b8;
+}
+.event-kind.failure {
+	color: #fda4af;
+}
+.event-kind.change {
+	color: #7dd3fc;
+}
+
+.metadata {
+	padding: 18px;
+}
+.metadata summary {
+	cursor: pointer;
+	color: #cbd5e1;
+	font-weight: 600;
+}
+.metadata pre {
+	max-height: 360px;
+	margin: 14px 0 0;
+	overflow: auto;
+	color: #cbd5e1;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+	.cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 760px) {
+	main {
+		padding: 14px;
+	}
+	header,
+	.iperf-panel .panel-heading {
+		align-items: flex-start;
+	}
+	.iperf-panel .panel-heading {
+		flex-direction: column;
+	}
+	.cards {
+		grid-template-columns: 1fr 1fr;
+	}
+	.chart {
+		height: 290px;
+	}
+	.signal-chart {
+		height: 420px;
+	}
+	.traffic-chart {
+		height: 320px;
+	}
+	.context-chart {
+		height: 380px;
+	}
+}
+
+@media (max-width: 480px) {
+	.cards {
+		grid-template-columns: 1fr;
+	}
+}

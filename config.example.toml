@@ -1,0 +1,37 @@
+[router]
+id = "home"
+url = "http://192.0.2.1"
+login = "monitor"
+password = "change-me"
+poll_interval = "1s"
+# Omit this to select the first Mobile interface reported by the router.
+# interface = "UsbLte0"
+
+# [ping]
+# host = "1.1.1.1"
+# interval = "5s"
+# count = 3
+# Literal addresses select IPv4 or IPv6 automatically. Set this for an IPv6 hostname.
+# ip_version = "ipv6"
+
+# [iperf3]
+# server = "iperf3.example.com"
+# port = 5201
+# duration_seconds = 10
+# protocol = "tcp"       # "tcp" or "udp"
+# direction = "upload"   # "upload" or "download"
+# ip_version = "ipv4"    # "ipv4" or "ipv6"
+# bitrate = 100000000     # Bits per second.
+# streams = 2
+# source = { interface = "UsbLte0" }
+# source = { address = "192.0.2.2" }
+
+[web]
+# bind = "127.0.0.1:3000"
+# plotly_source = "local"
+# debug = true
+
+# To serve the UI separately, uncomment all applicable settings.
+# output_dir = "/var/www/keenetic-monitor"
+# api_base_url = "http://monitor-host:3000"
+# cors_origin = "https://dashboard.example.com"

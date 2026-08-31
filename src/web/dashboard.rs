@@ -157,9 +157,11 @@ fn analysis_tables() -> Markup {
                     thead { tr {
                         th { "Radio context" } th class="numeric" { "Observed" }
                         th class="numeric" { "Samples" } th class="numeric" { "Entries" }
-                        th class="numeric" { "RSSI med / p10" } th class="numeric" { "RSRP med / p10" }
-                        th class="numeric" { "RSRQ med / p10" } th class="numeric" { "SINR med / p10 · <5 dB" }
-                        th class="numeric" { "Max DL / UL" }
+                        th class="numeric" { "RSSI med / p10" br; "dBm" }
+                        th class="numeric" { "RSRP med / p10" br; "dBm" }
+                        th class="numeric" { "RSRQ med / p10" br; "dB" }
+                        th class="numeric" { "SINR med / p10 · <5" br; "dB" }
+                        th class="numeric" { "Max DL / UL" br; "Mbit/s" }
                     } }
                     tbody { tr { td colspan="9" class="empty" { "No successful samples yet." } } }
                 }

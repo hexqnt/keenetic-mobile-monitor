@@ -544,16 +544,16 @@ function quantile(metric, percentile) {
 	return lower + (upper - lower) * (position - lowerRank);
 }
 
-function metricSummary(metric, unit) {
+function metricSummary(metric) {
 	if (!metric.count) return "—";
-	return `${quantile(metric, 0.5).toFixed(1)} / ${quantile(metric, 0.1).toFixed(1)} ${unit}`;
+	return `${quantile(metric, 0.5).toFixed(1)} / ${quantile(metric, 0.1).toFixed(1)}`;
 }
 
 function sinrSummary(group) {
 	const metric = group.metrics.sinr;
 	if (!metric.count) return "—";
 	const lowPercentage = ((group.lowSinr / metric.count) * 100).toFixed(1);
-	return `${metricSummary(metric, "dB")} · ${lowPercentage}%`;
+	return `${metricSummary(metric)} · ${lowPercentage}%`;
 }
 
 function updateTrafficMaximums(maximums, traffic) {
@@ -571,7 +571,13 @@ function trafficMaximumSummary(maximums) {
 	const format = (value) =>
 		Number.isFinite(value) ? (value / BITS_PER_MEGABIT).toFixed(2) : "—";
 	if (!Object.values(maximums).some(Number.isFinite)) return "—";
-	return `${format(maximums.download_bps)} / ${format(maximums.upload_bps)} Mbit/s`;
+	return `${format(maximums.download_bps)} / ${format(maximums.upload_bps)}`;
+}
+
+function observationSummary(durationMs, totalDurationMs) {
+	const share =
+		totalDurationMs > 0 ? percentage(durationMs, totalDurationMs) : "—";
+	return `${formatDuration(durationMs)} · ${share}`;
 }
 
 function updateGroup(sample) {
@@ -1103,15 +1109,23 @@ function renderContextTable() {
 		body.appendChild(row);
 		return;
 	}
+	const totalDurationMs = ordered.reduce(
+		(total, group) => total + group.durationMs,
+		0,
+	);
 	for (const group of ordered) {
 		const row = document.createElement("tr");
 		tableCell(row, contextDescription(group), "context-cell");
-		tableCell(row, formatDuration(group.durationMs), "numeric");
+		tableCell(
+			row,
+			observationSummary(group.durationMs, totalDurationMs),
+			"numeric",
+		);
 		tableCell(row, group.samples, "numeric");
 		tableCell(row, group.entries, "numeric");
-		tableCell(row, metricSummary(group.metrics.rssi, "dBm"), "numeric");
-		tableCell(row, metricSummary(group.metrics.rsrp, "dBm"), "numeric");
-		tableCell(row, metricSummary(group.metrics.rsrq, "dB"), "numeric");
+		tableCell(row, metricSummary(group.metrics.rssi), "numeric");
+		tableCell(row, metricSummary(group.metrics.rsrp), "numeric");
+		tableCell(row, metricSummary(group.metrics.rsrq), "numeric");
 		tableCell(row, sinrSummary(group), "numeric");
 		tableCell(row, trafficMaximumSummary(group.maxTraffic), "numeric");
 		body.appendChild(row);
